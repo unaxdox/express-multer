@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Formulario de Subida</title>
+  <meta charset="UTF-8">
+  <title>Upload Form</title>
 </head>
 <body>
-    <h1>Formulario para subir imagen</h1>
-    <form action="/profile" method="post" enctype="multipart/form-data">
-        <label for="izena">Tu Izena:</label>
-        <input type="text" id="izena" name="izena" required><br><br>
-        <input type="file" name="avatar" accept="image/png, image/jpeg" required><br><br>
-        <input type="submit" value="Subir">
-    </form>
-
-    <script>
-        // Función que se ejecuta cuando se carga la página después de la redirección
-        window.onload = function() {
-            // Verifica si hay parámetros en la URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const izena = urlParams.get('izena');
-            const file = urlParams.get('file');
-
-            if (izena && file) {
-                // Imprime el mensaje en la consola del navegador
-                console.log(`Izena: ${izena} Fitxategia: http://localhost:3000${file}`);
-
-                // Muestra el mensaje "Zuzen igo da" en la página
-                const messageElement = document.createElement('h1');
-                messageElement.textContent = 'Zuzen igo da';
-                document.body.appendChild(messageElement);
-            }
-        };
-    </script>
+  <form action="/profile" method="post" enctype="multipart/form-data">
+    <label for="username">Izena:</label>
+    <input type="text" id="username" name="username" placeholder="Enter your name" required />
+    <br><br>
+    <label for="avatar">Irudia igo:</label>
+    <input type="file" id="avatar" name="avatar" accept=".png, .jpg, .jpeg" required />
+    <br><br>
+    <button type="submit">Submit</button>
+  </form>
 </body>
 </html>
+<script>
+  const form = document.querySelector('form');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    fetch('/profile', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
+      console.log('Zure izena:'+ result.izena + ',Fitxategia: ' + result.fitxategia);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  });
+</script>
